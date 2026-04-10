@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { use } from "react";
 
-const Album = ({ food }) => {
-  const { dish_name, category, image_link, id } = food;
+const FoodDetails = async ({ params }) => {
+  const { foodId } = await params;
+  const foodRes = await fetch(
+    `https://phi-lab-server.vercel.app/api/v1/lab/foods/${foodId}`,
+  );
+  const foodData = await foodRes.json();
+  const food = foodData.data;
+  const { image_link, dish_name, category } = food;
   return (
-    <div className="p-3 border border-black/20 rounded-xl  flex flex-col justify-center gap-2 max-w-full">
+    <div className="p-3 rounded-xl  flex flex-col w-100">
       <div className="flex flex-col justify-center items-center h-auto">
         <Image
           width={200}
@@ -18,19 +23,16 @@ const Album = ({ food }) => {
         <h1 className="font-semibold text-2xl">{dish_name}</h1>
         <p>userId:{category}</p>
       </div>
-      <div className="flex flex-row gap-2 max-w-full mt-auto">
+      <div className="flex flex-col gap-2 mt-auto">
         <button className=" py-2 px-3 bg-yellow-500 rounded w-full text-black">
           Buy now
         </button>
-        <Link
-          href={`/albums/${id}`}
-          className=" py-2 px-3 bg-green-500 rounded w-full text-white"
-        >
+        <button className=" py-2 px-3 bg-green-500 rounded w-full text-white">
           Show Details
-        </Link>
+        </button>
       </div>
     </div>
   );
 };
 
-export default Album;
+export default FoodDetails;
