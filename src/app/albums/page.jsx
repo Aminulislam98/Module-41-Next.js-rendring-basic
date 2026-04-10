@@ -1,14 +1,16 @@
 import Album from "@/components/Album";
 
-const AlbumsPage = () => {
-  const promiseAlbum = fetch(
+const AlbumsPage = async () => {
+  const promiseAlbum = await fetch(
     "https://jsonplaceholder.typicode.com/albums",
-  ).then((res) => res.json());
-
+  );
+  const albums = await promiseAlbum.json();
+  console.log(albums);
   return (
-    <div>
-      This id data
-      <Album promiseAlbum={promiseAlbum}></Album>
+    <div className="max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-3 py-10">
+      {albums.map((album) => (
+        <Album key={album.id} album={album}></Album>
+      ))}
     </div>
   );
 };
